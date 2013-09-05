@@ -1,0 +1,3 @@
+bin/xivo-cloud-ivr-client /usr/bin
+etc/xivo-cloud.conf /etc/pf-xivo/
+extensions/xivo-cloud-ivr.conf /etc/asterisk/extensions_extra.d
