@@ -19,9 +19,21 @@ import httplib2
 import urllib
 from BeautifulSoup import BeautifulSoup
 import getopt, sys
+import ConfigParser
 
-def get_ivr(host, username, password, server):
-    url_ivr = "%s/ivr/shows/%s" %(host, server)
+def get_ivr(server, configfile):
+
+    config = ConfigParser.ConfigParser()
+    config.read(configfile)
+
+    username = config.get('general', 'username')
+    password = config.get('general', 'password')
+    host = config.get('general', 'host')
+    server_id = config.get(server, 'id')
+
+    print host
+
+    url_ivr = "%s/ivr/shows/%s" %(host, server_id)
     url_login = "%s/login" % host
 
     h = httplib2.Http(disable_ssl_certificate_validation=True)
@@ -55,13 +67,11 @@ def get_ivr(host, username, password, server):
         print content
 
 def main():
-    host = None
-    username = None
-    password = None
     server = None
+    config = '/etc/pf-xivo/xivo-cloud.conf'
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h:u:p:s:")
+        opts, args = getopt.getopt(sys.argv[1:], "h:s:c:")
     except getopt.GetoptError as err:
         print str(err)
         usage()
@@ -69,27 +79,24 @@ def main():
 
     for o, a in opts:
         if o == "-h":
-            host = a
-        elif o == "-u":
-            username = a
-        elif o == "-p":
-            password = a
+            usage()
         elif o == "-s":
             server = a
+        elif o == "-c":
+            config = a
         else:
             assert False, "unhandled option"
 
-    if host and username and password and server:
-        get_ivr( host, username, password, server)
+    if server:
+        get_ivr(server, config)
     else:
         usage()
 
 def usage():
     usage = """
-    -h define the host (ex. https://manage.xivo.fr)
-    -u define the username
-    -p define the password
-    -s define the id of the server
+    -h help
+    -c define the configuration file
+    -s define the server
     """
 
     print usage
