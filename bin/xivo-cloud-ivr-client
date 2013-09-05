@@ -31,8 +31,6 @@ def get_ivr(server, configfile):
     host = config.get('general', 'host')
     server_id = config.get(server, 'id')
 
-    print host
-
     url_ivr = "%s/ivr/shows/%s" %(host, server_id)
     url_login = "%s/login" % host
 
