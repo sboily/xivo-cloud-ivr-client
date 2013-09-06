@@ -57,7 +57,7 @@ def get_ivr(server, configfile):
     except:
         pass
 
-    if csrf_token or content.find("myivr") == -1:
+    if csrf_token or content.find("xivo-cloud-ivr") == -1:
         print "; Sorry login or password is invalid or url doesn't exist !"
         print "; Please contact support !"
     else:
